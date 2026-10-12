@@ -9,11 +9,11 @@ export async function POST(request) {
       request,
       onBeforeGenerateToken: async (pathname) => {
         const extension = pathname.split(".").pop()?.toLowerCase();
-        if (!["png","jpg","jpeg","pdf","svg","webp","tif","tiff","ai","eps","psd","zip"].includes(extension)) {
+        if (extension !== "pdf") {
           throw new Error("Format de fișier neacceptat.");
         }
         return {
-          allowedContentTypes: ["image/png","image/jpeg","image/webp","image/svg+xml","image/tiff","application/pdf","application/postscript","application/zip","application/x-zip-compressed","application/octet-stream","image/vnd.adobe.photoshop"],
+          allowedContentTypes: ["application/pdf"],
           maximumSizeInBytes: 100 * 1024 * 1024,
           addRandomSuffix: true
         };
