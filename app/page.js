@@ -1,0 +1,67 @@
+"use client";
+import {useMemo,useState} from "react";
+
+const PRICE=150;
+const WA="37361272220";
+
+function sameDayStatus(){
+  const parts=new Intl.DateTimeFormat("ro-RO",{timeZone:"Europe/Chisinau",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date());
+  const h=Number(parts.find(p=>p.type==="hour")?.value||0);
+  const m=Number(parts.find(p=>p.type==="minute")?.value||0);
+  return h<11 || (h===11&&m===0);
+}
+
+export default function Home(){
+ const [qty,setQty]=useState(1);
+ const [name,setName]=useState("");
+ const [phone,setPhone]=useState("");
+ const [delivery,setDelivery]=useState("Ridicare în Chișinău");
+ const [note,setNote]=useState("");
+ const [file,setFile]=useState(null);
+ const today=useMemo(()=>sameDayStatus(),[]);
+ const total=qty*PRICE;
+ function order(){
+   const msg=[
+    "Salut! Vreau să comand print DTF.",
+    `Client: ${name||"-"}`,
+    `Telefon: ${phone||"-"}`,
+    `Cantitate: ${qty} coală/coli 28 × 50 cm`,
+    `Total: ${total} MDL`,
+    `Livrare: ${delivery}`,
+    `Fișier: ${file?file.name:"îl trimit în conversație"}`,
+    note?`Notă: ${note}`:""
+   ].filter(Boolean).join("\n");
+   window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`,"_blank","noopener,noreferrer");
+ }
+ return <main>
+  <header className="nav"><a className="brand" href="#">DTF <span>Moldova</span></a><nav><a href="#pret">Prețuri</a><a href="#cum">Cum funcționează</a><a className="mini" href="#comanda">Comandă</a></nav></header>
+  <section className="hero">
+   <div className="heroCopy"><div className="eyebrow">PRINT DTF • CHIȘINĂU + TOATĂ MOLDOVA</div><h1>Print DTF<br/><em>în aceeași zi.</em></h1><p>Pentru ateliere și branduri. Trimite fișierul până la <b>11:00</b> și imprimăm azi.</p><div className="heroActions"><a className="primary" href="#comanda">Încarcă fișierul →</a><a className="secondary" href="#pret">Vezi prețurile</a></div><div className="facts"><b>150 MDL <small>/ coală</small></b><b>28 × 50 cm</b><b>Livrare în Moldova</b></div></div>
+   <div className="visual"><div className="sheet"><div className="sticker s1">DTF</div><div className="sticker s2">MOLDOVA</div><div className="sticker s3">PRINT</div><div className="sticker s4">⚡</div></div><div className="tag">Gata de transfer</div></div>
+  </section>
+
+  <section id="comanda" className="orderSec">
+   <div className="sectionIntro"><span>01 / COMANDĂ RAPIDĂ</span><h2>Trimite designul.<br/>Noi îl imprimăm.</h2><p className={today?"status good":"status"}>{today?"● Comenzile trimise acum pot fi imprimate azi":"● Termenul de 11:00 a trecut — confirmăm următorul termen pe WhatsApp"}</p></div>
+   <div className="orderCard">
+    <label className="drop"><input type="file" onChange={e=>setFile(e.target.files?.[0]||null)}/><strong>{file?file.name:"Alege fișierul pentru print"}</strong><span>{file?"Fișier selectat — îl vei trimite în conversația WhatsApp":"Click pentru selectare • fișierul rămâne pe dispozitiv până la trimitere"}</span></label>
+    <div className="grid2"><label>Nume / companie<input value={name} onChange={e=>setName(e.target.value)} placeholder="Ex. Atelier Studio"/></label><label>Telefon<input value={phone} onChange={e=>setPhone(e.target.value)} placeholder="+373 ..."/></label></div>
+    <div className="grid2"><label>Cantitate<div className="step"><button onClick={()=>setQty(Math.max(1,qty-1))}>−</button><b>{qty}</b><button onClick={()=>setQty(qty+1)}>+</button></div></label><label>Primire<select value={delivery} onChange={e=>setDelivery(e.target.value)}><option>Ridicare în Chișinău</option><option>Livrare în Moldova</option></select></label></div>
+    <label>Notă (opțional)<textarea value={note} onChange={e=>setNote(e.target.value)} placeholder="Detalii despre comandă"/></label>
+    <div className="total"><span>Total</span><strong>{total} MDL</strong></div>
+    <button className="send" onClick={order}>Trimite comanda pe WhatsApp →</button>
+    <p className="fine">WhatsApp va deschide mesajul comenzii. Atașează acolo fișierul selectat înainte de trimitere.</p>
+   </div>
+  </section>
+
+  <section className="benefits"><article><b>01</b><h3>În aceeași zi</h3><p>Trimite fișierul până la 11:00. Dacă este pregătit pentru print, îl imprimăm azi.</p></article><article><b>02</b><h3>Preț transparent</h3><p>150 MDL pentru fiecare coală 28 × 50 cm. Fără calcule complicate.</p></article><article><b>03</b><h3>Creat pentru B2B</h3><p>Noi imprimăm transferurile. Tu te ocupi de personalizarea produselor.</p></article></section>
+
+  <section id="cum" className="how"><div><span>02 / CUM FUNCȚIONEAZĂ</span><h2>De la fișier<br/>la transfer.</h2></div><ol><li><i>1</i><div><b>Încarci designul</b><p>Completezi cantitatea și datele comenzii.</p></div></li><li><i>2</i><div><b>Confirmăm comanda</b><p>Verificăm detaliile împreună pe WhatsApp.</p></div></li><li><i>3</i><div><b>Imprimăm</b><p>Comenzile eligibile până la 11:00 — în aceeași zi.</p></div></li><li><i>4</i><div><b>Ridici sau primești</b><p>Chișinău sau livrare în toată Moldova.</p></div></li></ol></section>
+
+  <section id="pret" className="pricing"><span>03 / PREȚURI</span><h2>Prețuri simple,<br/><em>fără calcule ascunse.</em></h2><div className="priceRow"><div><small>COALĂ DTF</small><strong>28 × 50 cm</strong></div><div className="big">150 <small>MDL</small></div></div><div className="examples"><span>1 coală <b>150 MDL</b></span><span>5 coli <b>750 MDL</b></span><span>10 coli <b>1 500 MDL</b></span></div></section>
+
+  <section className="faq"><span>04 / ÎNTREBĂRI</span><h2>Pe scurt.</h2><details><summary>Pot comanda o singură coală?</summary><p>Da. Comanda minimă este 1 coală — 150 MDL.</p></details><details><summary>Cât durează imprimarea?</summary><p>Dacă trimiți comanda până la 11:00 și fișierul este pregătit pentru print, imprimăm în aceeași zi.</p></details><details><summary>Aplicați DTF pe haine?</summary><p>Nu. Serviciul nostru este exclusiv imprimarea transferurilor DTF.</p></details><details><summary>Livrați în afara Chișinăului?</summary><p>Da, livrăm în toată Moldova.</p></details></section>
+
+  <section className="final"><p>AI COMENZI DE PERSONALIZARE?</p><h2>Noi îți imprimăm <em>DTF-ul.</em></h2><a href="#comanda">Trimite designul →</a></section>
+  <footer><b>DTF Moldova</b><span>Print DTF pentru ateliere și branduri.</span><span>© 2026 DTF Moldova</span></footer>
+ </main>
+}
