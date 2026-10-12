@@ -71,3 +71,36 @@ body{background:#101110}
 @media(max-width:850px){.hero{min-height:0;padding-bottom:65px}.hero h1{font-size:clamp(60px,12vw,96px)}.visual{height:460px}.photoFrame{height:410px;width:82%;border-width:8px}.floatingBadge{width:135px;height:135px;right:1%}.floatingBadge strong{font-size:26px}.gallery{padding:75px 6vw}.galleryHead{display:block}.galleryHead p{margin-top:24px}.galleryGrid{grid-template-columns:1fr 1fr}.galleryLarge{grid-column:1/-1;min-height:450px}.gallerySmall{min-height:340px}.galleryStatement{grid-column:auto;min-height:340px}.galleryStatement strong{font-size:38px}}
 @media(max-width:520px){.hero h1{font-size:57px}.heroActions{flex-wrap:wrap}.visual{height:370px}.photoFrame{height:330px}.floatingBadge{width:112px;height:112px;right:-1%}.floatingBadge span{font-size:18px}.floatingBadge strong{font-size:23px}.floatingBadge small{font-size:8px}.facts{gap:16px}.facts b{font-size:13px}.galleryGrid{grid-template-columns:1fr}.galleryLarge,.gallerySmall,.galleryStatement{grid-column:auto;min-height:340px}.galleryStatement{min-height:340px}.galleryStatement strong{font-size:52px}.ticker div{font-size:16px}}
 @media(prefers-reduced-motion:reduce){.ticker div,.floatingBadge,.galleryStatement .asterisk{animation:none}*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+
+
+/* Production information */
+.fileGuide{padding:110px 6vw;background:#e9e9df;color:#111}
+.fileGuideHead{display:grid;grid-template-columns:1.4fr .6fr;gap:30px;align-items:end;margin-bottom:48px}
+.fileGuideHead>span{grid-column:1/-1;font-size:12px;letter-spacing:2px;font-weight:900}
+.fileGuideHead h2,.apply h2{font-size:clamp(48px,6vw,86px);line-height:.95;letter-spacing:-.065em;margin:0}
+.fileGuideHead h2 em,.apply h2 em{font-style:normal;color:#e72c9b}
+.fileGuideHead p{max-width:360px;line-height:1.6;color:#555}
+.specGrid{display:grid;grid-template-columns:repeat(4,1fr);border:2px solid #111}
+.specGrid article{padding:30px;min-height:230px;border-right:2px solid #111;display:flex;flex-direction:column}
+.specGrid article:last-child{border:0}
+.specGrid article>span{font-size:10px;letter-spacing:2px;font-weight:900}
+.specGrid article strong{font-size:clamp(25px,2.3vw,38px);letter-spacing:-.04em;margin:34px 0 12px}
+.specGrid article p{font-size:14px;line-height:1.55;margin-top:auto;color:#4b4b46}
+.important{margin-top:18px;background:#111;color:#fff;padding:24px 28px;display:flex;gap:35px;align-items:center}
+.important b{color:var(--lime);letter-spacing:2px}
+.important p{margin:0;line-height:1.5}
+.apply{padding:110px 6vw;background:#ff4fd8;color:#111}
+.applyIntro{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:end}
+.applyIntro>span{grid-column:1/-1;font-size:12px;letter-spacing:2px;font-weight:900}
+.apply h2 em{color:#fff}
+.applyIntro p{max-width:400px;line-height:1.65;font-weight:650}
+.applySpecs{display:grid;grid-template-columns:repeat(4,1fr);margin-top:55px;border-block:2px solid #111}
+.applySpecs div{padding:27px 20px;border-right:2px solid #111}
+.applySpecs div:last-child{border:0}
+.applySpecs small{display:block;font-weight:900;letter-spacing:1.5px;font-size:10px;margin-bottom:12px}
+.applySpecs strong{font-size:clamp(26px,3vw,48px);letter-spacing:-.06em}
+.applySteps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#111;border:2px solid #111;margin-top:25px}
+.applySteps span{background:var(--lime);padding:23px;font-weight:900}
+.applyNote{font-size:12px;max-width:720px;margin-top:18px}
+@media(max-width:850px){.fileGuideHead,.applyIntro{grid-template-columns:1fr}.fileGuideHead>span,.applyIntro>span{grid-column:auto}.specGrid{grid-template-columns:1fr 1fr}.specGrid article:nth-child(2){border-right:0}.specGrid article{border-bottom:2px solid #111}.specGrid article:nth-child(3),.specGrid article:nth-child(4){border-bottom:0}.applySpecs{grid-template-columns:1fr 1fr}.applySpecs div:nth-child(2){border-right:0}.applySpecs div:nth-child(-n+2){border-bottom:2px solid #111}.applySteps{grid-template-columns:1fr}}
+@media(max-width:520px){.fileGuide,.apply{padding:75px 6vw}.specGrid{grid-template-columns:1fr}.specGrid article{min-height:180px;border-right:0!important;border-bottom:2px solid #111!important}.specGrid article:last-child{border-bottom:0!important}.important{align-items:flex-start;flex-direction:column;gap:10px}.applySpecs{grid-template-columns:1fr 1fr}.applySpecs strong{font-size:28px}}
