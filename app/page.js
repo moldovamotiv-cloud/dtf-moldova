@@ -45,7 +45,7 @@ export default function Home(){
     `Link fișier: ${fileUrl}`,
     note?`Notă: ${note}`:""
    ].filter(Boolean).join("\n");
-   window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`,"_blank","noopener,noreferrer");
+   window.location.href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
  }
  return <main>
   <header className="nav"><a className="brand" href="#">DTF <span>Moldova</span></a><nav><a href="#pret">Prețuri</a><a href="#cum">Cum funcționează</a><a className="mini" href="#comanda">Comandă</a></nav></header>
