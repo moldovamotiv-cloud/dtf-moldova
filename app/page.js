@@ -1,5 +1,6 @@
 "use client";
 import {useMemo,useState} from "react";
+import { upload } from "@vercel/blob/client";
 
 const PRICE=150;
 const WA="37361272220";
@@ -18,9 +19,21 @@ export default function Home(){
  const [delivery,setDelivery]=useState("Ridicare în Chișinău");
  const [note,setNote]=useState("");
  const [file,setFile]=useState(null);
+ const [uploading,setUploading]=useState(false);
+ const [uploadError,setUploadError]=useState("");
  const today=useMemo(()=>sameDayStatus(),[]);
  const total=qty*PRICE;
- function order(){
+ async function order(){
+   if(uploading)return;
+   if(!file){setUploadError("Selectează fișierul înainte de trimitere.");return;}
+   setUploading(true);setUploadError("");
+   let fileUrl;
+   try {
+     const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+     const result=await upload(`comenzi/${Date.now()}-${safeName}`,file,{access:"public",handleUploadUrl:"/api/upload"});
+     fileUrl=result.url;
+   }catch(error){setUploadError("Fișierul nu a fost încărcat. Încearcă din nou. "+(error?.message||""));setUploading(false);return;}
+   setUploading(false);
    const msg=[
     "Salut! Vreau să comand print DTF.",
     `Client: ${name||"-"}`,
@@ -28,7 +41,8 @@ export default function Home(){
     `Cantitate: ${qty} coală/coli 28 × 50 cm`,
     `Total: ${total} MDL`,
     `Livrare: ${delivery}`,
-    `Fișier: ${file?file.name:"îl trimit în conversație"}`,
+    `Fișier: ${file.name}`,
+    `Link fișier: ${fileUrl}`,
     note?`Notă: ${note}`:""
    ].filter(Boolean).join("\n");
    window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`,"_blank","noopener,noreferrer");
@@ -43,13 +57,13 @@ export default function Home(){
   <section id="comanda" className="orderSec">
    <div className="sectionIntro"><span>01 / COMANDĂ RAPIDĂ</span><h2>Trimite designul.<br/>Noi îl imprimăm.</h2><p className={today?"status good":"status"}>{today?"● Comenzile trimise acum pot fi imprimate azi":"● Termenul de 11:00 a trecut — confirmăm următorul termen pe WhatsApp"}</p></div>
    <div className="orderCard">
-    <label className="drop"><input type="file" onChange={e=>setFile(e.target.files?.[0]||null)}/><strong>{file?file.name:"Alege fișierul pentru print"}</strong><span>{file?"Fișier selectat — îl vei trimite în conversația WhatsApp":"Click pentru selectare • fișierul rămâne pe dispozitiv până la trimitere"}</span></label>
+    <label className="drop"><input type="file" onChange={e=>setFile(e.target.files?.[0]||null)}/><strong>{file?file.name:"Alege fișierul pentru print"}</strong><span>{file?"Fișier pregătit pentru încărcare automată":"Click pentru selectare • fișierul se încarcă la trimiterea comenzii"}</span></label>
     <div className="grid2"><label>Nume / companie<input value={name} onChange={e=>setName(e.target.value)} placeholder="Ex. Atelier Studio"/></label><label>Telefon<input value={phone} onChange={e=>setPhone(e.target.value)} placeholder="+373 ..."/></label></div>
     <div className="grid2"><label>Cantitate<div className="step"><button onClick={()=>setQty(Math.max(1,qty-1))}>−</button><b>{qty}</b><button onClick={()=>setQty(qty+1)}>+</button></div></label><label>Primire<select value={delivery} onChange={e=>setDelivery(e.target.value)}><option>Ridicare în Chișinău</option><option>Livrare în Moldova</option></select></label></div>
     <label>Notă (opțional)<textarea value={note} onChange={e=>setNote(e.target.value)} placeholder="Detalii despre comandă"/></label>
     <div className="total"><span>Total</span><strong>{total} MDL</strong></div>
-    <button className="send" onClick={order}>Trimite comanda pe WhatsApp →</button>
-    <p className="fine">WhatsApp va deschide mesajul comenzii. Atașează acolo fișierul selectat înainte de trimitere.</p>
+    <button className="send" onClick={order} disabled={uploading}>{uploading?"Se încarcă fișierul...":"Încarcă fișierul și trimite comanda →"}</button>{uploadError&&<p role="alert" style={{color:"#b42318",fontWeight:700}}>{uploadError}</p>}
+    <p className="fine">Fișierul este salvat în Vercel Blob înainte să se deschidă WhatsApp. Mesajul include linkul. Confirmă trimiterea mesajului în WhatsApp pentru finalizarea comenzii.</p>
    </div>
   </section>
 
